@@ -1,0 +1,17 @@
+{
+    "name": "shaharyaransari/ielts-speaking-quiz",
+    "license": "gpl",
+    "autoload": {
+        "psr-4": {
+            "ISQNS\\": "Inc/"
+        }
+    },
+    "authors": [
+        {
+            "name": "shaharyar",
+            "email": "shaharyaransari2783912@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

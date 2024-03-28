@@ -1,0 +1,39 @@
+.quiz-builder-button-wrap a{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    background-color: #223;
+    border: none;
+    border-radius: 0;
+    color: white;
+    fill: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    text-transform: uppercase;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+.quiz-builder-button-wrap a:hover{
+    background-color: #A70000;
+}
+.wp-ielts-container{
+    margin-top: 2em;
+    background: white;
+    padding: 3em;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+}
+.wp-ielts-container-head{
+    font-weight: bold;
+}
+.wp-ielts-container-body .button{
+    margin-top: 20px;
+}
