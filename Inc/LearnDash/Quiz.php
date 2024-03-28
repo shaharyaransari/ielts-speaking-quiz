@@ -105,6 +105,7 @@ class Quiz {
     public function delete_linked_ld_quiz($post_id){
         if ($post = get_post($post_id)) {
             ResultsManager::delete_results(['quiz_id' => $post_id]);
+
             if ($post->post_type === SpeakingQuiz::get_post_type_id()) {
                 $linked_ld_quiz = get_post_meta($post_id, 'ld_quiz_id', true);
                 wp_delete_post($linked_ld_quiz, true);

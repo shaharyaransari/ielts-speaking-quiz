@@ -127,8 +127,11 @@ $quiz_elements = $quiz_elements['contents'];
                         </div>
                         
                         <div class="question-content-wrap"> 
-                            <div class="question-content">
+                            <div class="question-title">
                                 Where Are You From?
+                            </div>
+                            <div class="question-content">
+                                Question Content Here
                             </div>
                         </div>
                         <!-- Recorder  -->

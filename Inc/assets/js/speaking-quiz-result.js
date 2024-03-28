@@ -170,8 +170,7 @@ async function prepareSuggestions(){
             errors += `${q.gpt_input}\n`;
         });
         sp.gpt_input_errors = errors;
-        let suggestionsData = await getGrammerSuggestionsData(sp.transcript, sp, index);
-        
+        await getVocabularySuggestionsData(sp.transcript, sp, index);
         return true;
     });
     return await Promise.all(promises);
@@ -778,9 +777,9 @@ async function loadSuggestions(category){
     let wrapperNode = document.querySelector(`#${category}-suggestions`);
     let suggestionNode = document.querySelector(`#${category}-suggestion-temp`);
     if(category == 'grammer' || category == 'vocabulary'){
-        // Load Grammer Suggestions List
+        // Load Vocbulary Suggestions List
         let sWrap = wrapperNode.content.cloneNode(true);
-        let suggestions = await getGrammerSuggestionsData(currentSpeakingPart.transcript);
+        let suggestions = await getVocabularySuggestionsData(currentSpeakingPart.transcript);
         // console.log(suggestions);
         if(suggestions.length > 0){
             suggestions.forEach(suggestion => {
@@ -898,7 +897,7 @@ async function loadSuggestions(category){
  * @param {*} transcript
  * @returns 
  */
-async function getGrammerSuggestionsData(transcript, speakingPart = currentSpeakingPart, spIndex = currentSpIndex){
+async function getVocabularySuggestionsData(transcript, speakingPart = currentSpeakingPart, spIndex = currentSpIndex){
     if(!transcript){
         display_isq_msg('No Questions Were Attempted in This part');
         return [];
@@ -909,7 +908,7 @@ async function getGrammerSuggestionsData(transcript, speakingPart = currentSpeak
         // Should be Loaded by Open AI
         let formData = new FormData();
         formData.append('transcript', transcript);
-        formData.append('action', 'get_openai_gsuggestions');
+        formData.append('action', 'get_openai_vocab_suggestions');
         formData.append('nonce', wpdata.openai_nonce);
         OpenAiResponse = await fetch(wpdata.ajaxurl,{
             method: 'post',

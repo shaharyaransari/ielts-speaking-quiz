@@ -179,7 +179,7 @@ function doRecording(){
         clearInterval(timer);
         // do whatever with audio blob
         // Temp URL 
-        let tempURL = URL.createObjectURL(blob);
+        // let tempURL = URL.createObjectURL(blob); // Can Use If needed
 
         // Creating File For attaching with input type file element 
         let audioFile = new File([blob], fileName, {type:"audio/webm", lastModified:new Date().getTime()})
@@ -327,11 +327,21 @@ function doRecording(){
         // console.log(spAllowedTime, spRecordedTime);
         display_isq_msg(`You can record for Max ${allowedTime} Seconds`);
         let currentQuestion = results_obj.result_elements[currentSpIndex]['questions'][currentQuestionIndex];
-        if("attachment_id" in currentQuestion){
+        if("attachment_id" in currentQuestion){ // means Question was Attempted Before
+
             if(currentQuestion.attachment_id){
+                
+                // Delete Audio
                 let previsousAudio = results_obj.result_elements[currentSpIndex]['questions'][currentQuestionIndex].attachment_id;
                 deleteAudio(previsousAudio);
                 results_obj.result_elements[currentSpIndex]['questions'][currentQuestionIndex].attachment_id = null;
+                // Process For Resetting Question
+                resetQuestionObject();
+                resetQuestionCompletion();
+                // Hide Improved Answer
+                let improvedAnswerWrap = document.querySelector('#improved-answer-wrap')
+                improvedAnswerWrap.classList.remove('active');
+                improvedAnswerWrap.querySelector('.improved-answer-content').innerHTML = 'Thinking...';
             }
         }
     }
@@ -397,10 +407,15 @@ async function loadQuestion(spIndex,qIndex){
     let srNumber = parseInt(qIndex) + 1;
     let qId = getQuestionIdByIndex(spIndex,qIndex);
     let qData = await loadQuestionData(qId);
+    let isSeenByUser = ('seen_by_user' in results_obj.result_elements[spIndex]['questions'][qIndex]); // False if Question Never Loaded Before
+
     // Set Tracking Values 
     currentQuestion = qData;
     currentQuestionIndex = qIndex;
     results_obj.result_elements[spIndex]['questions'][qIndex].post_data = qData;
+    if(!isSeenByUser){
+        results_obj.result_elements[spIndex]['questions'][qIndex].seen_by_user = true; // Set the Seen Flag to true
+    }
     // Check if Question is attempted or not
     let isAttempted = results_obj.result_elements[spIndex]['questions'][qIndex].attempted;
     let questionAudio = qData.question_audio.audio_url;
@@ -441,6 +456,7 @@ async function loadQuestion(spIndex,qIndex){
     let node = template.content.cloneNode(true);
     node.querySelector('#isq-quiz-content-header').innerHTML = `${currentSpeakingPart.post_title}`;
     node.querySelector('.isq-quiz-content-body-inner .question-number').innerHTML = `Question ${srNumber}`;
+    node.querySelector('.isq-quiz-content-body-inner .question-title').innerHTML = currentQuestion.post_title;
     node.querySelector('.isq-quiz-content-body-inner .question-content').innerHTML = currentQuestion.post_content;
     if(questionAudio){
         node.querySelector('.isq-quiz-content-body-inner .question-number-wrap .player-wrap').innerHTML = playerMarkup;
@@ -474,6 +490,10 @@ async function loadQuestion(spIndex,qIndex){
     // Empty Wrapper
     wrapper.innerHTML = '';
     wrapper.appendChild(node);
+    if(questionAudio && !isSeenByUser){
+        wrapper.querySelector('.question-audio-wrap .question-audio-trigger').click();
+        // console.log(wrapper.querySelector('.question-audio-wrap .question-audio-trigger'));
+    }
 }
 
 function getImprovedAnswer(){

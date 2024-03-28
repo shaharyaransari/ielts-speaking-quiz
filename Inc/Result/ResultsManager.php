@@ -41,6 +41,22 @@ class ResultsManager {
         return self::decode_results($results);
     }
 
+    public static function get_results_by_quiz_ids(array $quiz_ids) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'isq_results';
+        
+        // Prepare the query part for the array of quiz IDs
+        $placeholders = implode(',', array_fill(0, count($quiz_ids), '%d'));
+        
+        // Prepare the SQL query, injecting the table name and placeholders for quiz IDs
+        $sql = $wpdb->prepare("SELECT * FROM $table_name WHERE quiz_id IN ($placeholders)", $quiz_ids);
+        
+        // Execute the query and fetch results
+        $results = $wpdb->get_results($sql, ARRAY_A);
+        
+        return self::decode_results($results);
+    }
+
     private static function decode_results($results) {
         if ($results) {
             foreach ($results as &$result) {
@@ -72,6 +88,39 @@ class ResultsManager {
         }
 
         return $results;
+    }
+
+    public static function get_results_by_group_leader($group_leader_id, $user_ids = array(), $group_ids = array()) {
+        if(function_exists('groups_get_user_groups')){
+            $groups = groups_get_user_groups($group_leader_id);
+            // Get User IDs
+            if(empty($user_ids) && empty($group_ids)){ // No User Ids given as Parameter
+                // Build User_Ids Array
+                $user_ids = [$group_leader_id];
+                foreach ($groups['groups'] as $group_id) {
+                    if (groups_is_user_admin($group_leader_id, $group_id)) { // false if not?
+                        $group_members = groups_get_group_members(array('group_id' => $group_id))['members']; //
+                        foreach ($group_members as $member) {
+                            if (!in_array($member->ID, $user_ids)) { // Check if the user ID is not already in the array
+                                $user_ids[] = $member->ID;
+                            }
+                        }
+                    }
+                }
+            } // Let's complete this first
+            $quiz_ids = [];
+            foreach($user_ids as $user_id) {
+                $attempted_quizzes = get_user_meta($user_id, '_ielts_speaking_quizzes', true);
+                // Merge arrays
+                $quiz_ids = array_merge($quiz_ids, $attempted_quizzes);
+            }
+            // Remove duplicates
+            $quiz_ids = array_unique($quiz_ids);
+            $results = self::get_results_by_quiz_ids($quiz_ids);
+            return $results;
+        }else{
+            return 'The Function Requires BuddyBoss Theme to be Active';
+        }
     }
 
     public static function get_results_by_user($user_id) {

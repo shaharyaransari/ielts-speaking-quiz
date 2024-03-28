@@ -11,8 +11,8 @@ use \WP_REST_Server;
 
 class AjaxHooks{
     public function register(){
-        add_action('wp_ajax_get_openai_gsuggestions', array($this, 'get_openai_gsuggestions'));
-        add_action('wp_ajax_nopriv_get_openai_gsuggestions', array($this, 'get_openai_gsuggestions'));     
+        add_action('wp_ajax_get_openai_vocab_suggestions', array($this, 'get_openai_vocab_suggestions'));
+        add_action('wp_ajax_nopriv_openai_vocab_suggestions', array($this, 'get_openai_vocab_suggestions'));     
         add_action('wp_ajax_get_vocabulary_score', array($this, 'get_vocabulary_score'));
         add_action('wp_ajax_nopriv_get_vocabulary_score', array($this, 'get_vocabulary_score'));     
         add_action('wp_ajax_get_grammer_score', array($this, 'get_grammer_score'));
@@ -40,12 +40,12 @@ class AjaxHooks{
          wp_send_json_error('Un Authorized Access');
       }
     }
-    public function get_openai_gsuggestions(){
+    public function get_openai_vocab_suggestions(){
         if(isset($_REQUEST['nonce']) && wp_verify_nonce( $_REQUEST['nonce'], 'use_ielts_openai' )){
   
            if(isset($_POST['transcript']) && $_POST['transcript'] != ''){
               $transcript = $_POST['transcript'];
-              $suggestions = OpenAI::get_grammer_suggestions($transcript);
+              $suggestions = OpenAI::get_vocabulary_suggestions($transcript);
               wp_send_json_success(  $suggestions );
            }else{
               wp_send_json_error('Incomplete Request');

@@ -350,6 +350,7 @@ function copyElementContent(){
  * Audio Element Should be Wrapped inside the Trigger.
  */
 function playQuestionAudio(){
+  console.log('triggered');
   let trigger = this.event.target;
   let audio = trigger.parentElement.querySelector('audio');
   let src = audio.getAttribute('src');

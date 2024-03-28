@@ -72,25 +72,26 @@ class Shortcodes{
         $current_user = wp_get_current_user();
         $args = shortcode_atts( array(
             'user_id' => null,
-            'instructor' => null,
+            'bb_group_leader' => null, //  BuddyBoss Group Leader? 
             'admin' => null
         ), $atts);
         $user_id = $args['user_id'];
-        $for_instructor = false;
+        $for_bb_group_leader = false;
         $for_admin = false;
 
-        if($args['admin'] != null || current_user_can('manage_options')){
+        if($args['admin'] != null || current_user_can('manage_options')){ // 
             $for_admin = true;
-        }elseif($args['instructor'] != null || self::user_has_role('wdm_instructor')){
-            $for_instructor = true;
+        }elseif($args['bb_group_leader'] != null || self::user_has_role('wdm_instructor')){ // So we can rely on that right?
+            $for_bb_group_leader = true;
         }
 
-        if($for_admin){
+        if($for_admin){ // All other attributes will be ignored if user is admin
             $results = ResultsManager::get_all_results();
-        }elseif($for_instructor){
-            $author_id = wp_get_current_user(  );
-            $author_id = $author_id->ID;
-            $results = ResultsManager::get_results_by_author($author_id);
+        }elseif($for_bb_group_leader){ 
+            // Somehow we need to get the quiz author id by using group leader id
+            $group_leader_id = wp_get_current_user(  );
+            $group_leader_id = $group_leader_id->ID;
+            $results = ResultsManager::get_results_by_group_leader($group_leader_id);
         }else{
 
             if($args['user_id'] === null){

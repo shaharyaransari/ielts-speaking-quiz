@@ -45,7 +45,10 @@ class OpenAI {
 
         $json_response = json_decode($response, true);
         if($json_response){
-            return $json_response['choices'][0]['message']['content'];;
+            if(isset($json_response['error'])){
+                return 'Something Went Wrong';
+            }
+            return $json_response['choices'][0]['message']['content'];
         }else{
             return $response;
         }
@@ -63,7 +66,7 @@ class OpenAI {
         return self::sendRequest($prompt);
     }
 
-    public static function get_grammer_suggestions($transcript) {
+    public static function get_vocabulary_suggestions($transcript) {
         $content = $transcript;
         $prompt = <<< EOF
         As a vocabulary expert and linguistics specialist, your role involves a detailed review of the following essay. Your task is to identify any unnatural or incorrect use of vocabulary, especially those not aligning with academic style and formal language, and to suggest natural yet academically appropriate alternatives. Please adhere to these guidelines:

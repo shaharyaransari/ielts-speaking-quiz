@@ -179,22 +179,32 @@ class AjaxHooks {
           $current_user = wp_get_current_user(  );
           $current_user_id = $current_user->ID;
           $quiz_id = $result_obj['quiz_id'];
-         //  $meta_key = "ielts_quiz_{$quiz_id}_{$try_number}";
-         //  update_user_meta(  $current_user_id , $meta_key , $result_obj );
+          
+          $attemted_quizzes = get_user_meta( $current_user_id, '_ielts_speaking_quizzes', true );
+          if($attemted_quizzes && !empty($attemted_quizzes)){
+            // Push the New Quiz ID to Existing Array
+            array_push($attemted_quizzes, $quiz_id);
+          }else{
+            // Create a New Array with Current Quiz ID
+            $attemted_quizzes = array($quiz_id);
+          }
+          update_user_meta(  $current_user_id , '_ielts_speaking_quizzes' , $attemted_quizzes );
           $result_id = ResultsManager::add_result($current_user_id, $quiz_id, $result_obj, $try_number);
           $result_url = ResultsManager::get_quiz_result_page_url($quiz_id,$try_number,$current_user_id);
           $data = array(
               'user' => $current_user_id,
               'result_url' => $result_url,
           );
+
           if(function_exists('learndash_process_mark_complete')){
-            $ld_quiz_id = $result_obj['ld_quiz'];
-            $ld_course = $result_obj['ld_course'];
+            $ld_quiz_id = isset($result_obj['ld_quiz']) ? $result_obj['ld_quiz'] : null;
+            $ld_course = isset($result_obj['ld_course']) ? $result_obj['ld_quiz'] : null;
             if($ld_course && $ld_quiz_id){
                $data['quiz_data']  = LearndashQuizHelper::autocomplete_ld_quiz($current_user_id, $ld_quiz_id, $ld_course, $quiz_id, $try_number);
                $data['user_meta']  = get_user_meta( $current_user_id, '_sfwd-quizzes', true);
             }
           }
+
           wp_send_json_success($data);
       }else{
           wp_send_json_error( 'Invalid Request' );
