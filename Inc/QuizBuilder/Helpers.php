@@ -174,11 +174,16 @@ class Helpers {
                                                         </div>
                                                         <div class="question-audio-field isq-field-group c-display-container">
                                                             <select required class="c-display-trigger" name="question_audio_upload_type" id="question_audio_upload_type" onchange="toggleConditionalFields()">
+                                                                <option value="no_audio_attached">No Audio</option>
                                                                 <option value="upload_audio_file" >Upload Audio File</option>
                                                                 <option value="self_record_audio" selected >Self Record </option>
                                                                 <option value="file_url" >File URL</option>
                                                             </select>
+                                                            <div class="c-display no_audio_attached">
+                                                                <input type="hidden" name="no_audio" id="question_audio_file_<?php echo $iq_id; ?>" value="">
+                                                            </div>
                                                             <!-- Upload Audio File  -->
+                                                            
                                                             <div class="c-display upload_audio_file">
                                                                 <input type="file" name="question_audio_file" id="question_audio_file"  value="">
                                                             </div>
