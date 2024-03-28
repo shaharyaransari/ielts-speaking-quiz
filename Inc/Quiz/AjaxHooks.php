@@ -5,6 +5,7 @@ use \ISQNS\External\Whisper;
 use \ISQNS\External\GrammerAPI;
 use \ISQNS\External\OpenAI;
 use \ISQNS\Result\ResultsManager;
+use ISQNS\LearnDash\Quiz as LearndashQuizHelper;
 use \WP_REST_Server;
 
 // WP_REST_Server::READABLE = ‘GET’
@@ -190,7 +191,7 @@ class AjaxHooks {
             $ld_quiz_id = $result_obj['ld_quiz'];
             $ld_course = $result_obj['ld_course'];
             if($ld_course && $ld_quiz_id){
-               $data['quiz_data']  = Helpers::autocomplete_ld_quiz($current_user_id, $ld_quiz_id, $ld_course, $quiz_id, $try_number);
+               $data['quiz_data']  = LearndashQuizHelper::autocomplete_ld_quiz($current_user_id, $ld_quiz_id, $ld_course, $quiz_id, $try_number);
                $data['user_meta']  = get_user_meta( $current_user_id, '_sfwd-quizzes', true);
             }
           }
