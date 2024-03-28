@@ -231,6 +231,11 @@ function doRecording(){
                     }).then(res=> res.json())
                     .then(correctionData => {
                         if(correctionData.success){
+                            if(!(correctionData.data)){
+                                display_isq_msg('Something Went Wrong', 'error');
+                                console.log(correctionData);
+                                return;
+                            };
                             if(correctionData.data.corrections === null){
                                 display_isq_msg('Something Went Wrong', 'error');
                                 return;
@@ -305,7 +310,7 @@ function doRecording(){
         spRecordedTime = getSpRecordedTime(currentSpIndex);
         results_obj.result_elements[currentSpIndex]['audio_length'] = spRecordedTime;
         allowedTime = parseInt(spAllowedTime) - parseInt(spRecordedTime);
-        console.log(spAllowedTime, spRecordedTime);
+        // console.log(spAllowedTime, spRecordedTime);
         display_isq_msg(`You can record for Max ${allowedTime} Seconds`);
         let currentQuestion = results_obj.result_elements[currentSpIndex]['questions'][currentQuestionIndex];
         if("attachment_id" in currentQuestion){
@@ -644,7 +649,9 @@ async function submitQuiz(){
 
 function formatCorrectionsForChatGPT(errors) {
     let resultString = '';
-
+    if(!(errors.length > 0)){
+        return resultString;
+    }
     errors.forEach((error, index) => {
         const originalError = error.message;
         const correction = error.replacements.map(rep => rep.value).join(' or ');
