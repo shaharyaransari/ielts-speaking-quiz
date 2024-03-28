@@ -46,9 +46,13 @@ class PronunciationAPI{
         
         $response = curl_exec($curl);
         curl_close($curl);
-        $response = self::validateJson($response);
-        $response = json_decode($response);
-        return $response;
+        $validated_response = self::validateJson($response);
+        $json_response = json_decode($validated_response);
+        if($json_response){
+            return $json_response;
+        }else{
+            return $response;
+        }
     }
 
     public static function validateJson($response){

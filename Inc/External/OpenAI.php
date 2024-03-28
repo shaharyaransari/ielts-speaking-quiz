@@ -43,8 +43,12 @@ class OpenAI {
         $response = curl_exec($curl);
         curl_close($curl);
 
-        $response = json_decode($response, true);
-        return $response['choices'][0]['message']['content'];
+        $json_response = json_decode($response, true);
+        if($json_response){
+            return $json_response['choices'][0]['message']['content'];;
+        }else{
+            return $response;
+        }
     }
 
     public static function get_improved_answer($transcript) {

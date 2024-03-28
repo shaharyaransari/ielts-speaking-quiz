@@ -51,8 +51,12 @@ class GrammerAPI{
             ));
 
             $response = curl_exec($curl);
-            $response = json_decode($response);
+            $json_response = json_decode($response);
             curl_close($curl);
-            return $response;
+            if($json_response){
+                return $json_response;
+            }else{
+                return $response;
+            }
     }
 }
