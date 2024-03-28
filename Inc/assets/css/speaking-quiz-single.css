@@ -61,7 +61,7 @@
     border-radius: 8px;
     max-width: 700px;
     margin-inline: auto;
-    overflow: hidden;
+    /* overflow: hidden; */
     transition: opacity 0.6s ease-in-out; /* Smooth transition for opacity */
     opacity: 1; /* Fully visible by default */
 }
@@ -124,6 +124,12 @@
 .isq-quiz-content-footer{
     display: flex;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.isq-quiz-content-footer > .quiz-content-footer-action:first-child{
+    border-bottom-left-radius: 8px;
+}
+.isq-quiz-content-footer > .quiz-content-footer-action:last-child{
+    border-bottom-right-radius: 8px;
 }
 .isq-quiz-content-body-inner .sp-number{
     font-weight: bold;

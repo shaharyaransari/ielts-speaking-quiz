@@ -246,19 +246,33 @@ function doRecording(){
                             let formattedTranscript = transcript;
                             if(corrections.length > 0){
                                 for(let i=0; i < corrections.length ; i++){
-                                    let shortMessage = corrections[i].shortMessage;
-                                    let message = corrections[i].message;
-                                    let offset = corrections[i].offset;
-                                    let length = corrections[i].length;
-                                    let replacements = corrections[i].replacements;
-                                    let replacementsHtml = '';
-                                    if(replacements.length > 0){
+                                
+									let offset = corrections[i].offset;
+									let length = corrections[i].length;
+// 									console.log(offset,length);
+                                    let placehoder = `PLACEHOLDER_${i}`;
+                                    let incorrectText = transcript.substr(offset,length);
+// 									console.log(offset,length,incorrectText);
+                                   
+                                    formattedTranscript = formattedTranscript.replace(incorrectText, placehoder);
+                                }
+                            }
+							if(corrections.length > 0){
+								for(let i=0; i < corrections.length ; i++){
+								let shortMessage = corrections[i].shortMessage;
+								let message = corrections[i].message;
+								let replacements = corrections[i].replacements;
+								let replacementsHtml = '';
+								let offset = corrections[i].offset;
+								let length = corrections[i].length;
+								let incorrectText = transcript.substr(offset,length);
+								if(replacements.length > 0){
                                         for(let x=0; x < replacements.length; x++){
                                             replacementsHtml += `<span>${replacements[x].value}</span>`;
                                         }
                                     }
-                                    let incorrectText = transcript.substr(offset,length);
-                                    let errorId = `error-${i}`;
+								 let errorId = `error-${i}`;
+									let placehoder = `PLACEHOLDER_${i}`;
                                     let errorPopup = `<span class="g-error-wrap" data-id="${errorId}" onmouseover="positionGError()">
                                     <span class="g-error">${incorrectText}</span>
                                         <span class="g-error-popup">
@@ -267,9 +281,9 @@ function doRecording(){
                                             <span class="g-error-replacements">${replacementsHtml}</span>
                                         </span>
                                     </span>`;
-                                    formattedTranscript = formattedTranscript.replace(incorrectText, `${errorPopup}`);
-                                }
-                            }
+								formattedTranscript = formattedTranscript.replace(placehoder, errorPopup);
+								}
+							}
                             formattedTranscript = formattedTranscript.replaceAll('\\', '');
                             // Save Data in Data Object
                             results_obj.result_elements[currentSpIndex]['questions'][currentQuestionIndex].attempted = true;
