@@ -1118,13 +1118,7 @@ function markPErrors(q){
                         ipa : ipa
                     });
                 }
-                // console.log(pErrorsTranscript);
-                // console.log(`Match Number: ${matchNumber} ${match}`, replacement);
-                if( true ){
-                    return markup;
-                }else{
-                    return match;
-                }
+                return markup;
               });
         });
     };
