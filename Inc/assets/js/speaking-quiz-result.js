@@ -3,13 +3,9 @@ let results_obj = wpdata.result; // Get Result Data
 // Tracking variables 
 let currentSpeakingPart = null;
 let currentSpIndex = null;
-// let isResultReady = results_obj.result_ready; 
-let isResultReady = false; 
-// let isPronunDataReady = results_obj.pronun_data_ready;
-let isPronunDataReady = false;
+let isResultReady = results_obj.result_ready; 
+let isPronunDataReady = results_obj.pronun_data_ready;
 let currentActiveTab = null;
-// console.log(isResultReady);
-// Create an instance of the AudioPlayer
 // Initialize Page
 initResultPage();
 
@@ -18,10 +14,8 @@ initResultPage();
  */
 async function initResultPage() {
     // Load First Speaking Part
-    // showResultPageLoading();
     // Prepare Data 
     if(!isResultReady){
-    // updateLoadingText('<br> - Getting Grammer Suggesstions', true);
     await prepareSuggestions();
     }
 
@@ -34,9 +28,7 @@ async function initResultPage() {
     }
     if(!isPronunDataReady){
         // Prepare Pronunciation Data
-        // updateLoadingText('<br> - Grammer Suggestions Ready <br>  - Analyzing Pronunciation.. <br> - This Usually Takes Time Please Do not leave page', true);
         await preparePronunciationData();
-        // updateLoadingText('<br> - Almost Done...', true);
     }
 
     // Render scores after prepareScores is complete
@@ -50,7 +42,6 @@ async function initResultPage() {
     if(!isResultReady && isPronunDataReady){
         saveResultData();
     }
-    // hideResultPageLoading();
 }
 
 function spAttemptedQuestionsCount(spIndex){
@@ -354,7 +345,6 @@ function getPronunciationScore(spIndex){
     if(!isPronunDataReady){
         return null;
     }
-    // Wait until isPronunDataReady becomes true
     let score = 0;
     let totalWordCount = 0;
     let totalAccXWords = 0;
@@ -799,11 +789,6 @@ async function loadSuggestions(category){
     }else if(category == 'pronunciation'){
         
         // Load pronunciation Suggestions List
-        // let sWrap = wrapperNode.content.cloneNode(true);
-        // let sNode = suggestionNode.content.cloneNode(true);
-        // let suggestionsData = await getPronSuggestionsData();
-        // console.log(suggestionsData);
-        // Load Grammer Suggestions List
         let sWrap = wrapperNode.content.cloneNode(true);
         if(!isPronunDataReady){
             sWrap.innerHTML = ``;
@@ -823,7 +808,6 @@ async function loadSuggestions(category){
             </div>
             <!-- /Single Suggestion  -->
         </div>`;
-            // wrapper.appendChild(sWrap);
             return;
         }
         let pronunErrors =  getPronSuggestionsData(currentSpeakingPart);

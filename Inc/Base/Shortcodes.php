@@ -101,6 +101,9 @@ class Shortcodes{
             $results = ResultsManager::get_results_by_user($user_id);
         }
         ob_start();
+        if(!is_array($results)){
+            return $results;
+        }
         echo "<div class='result-list'>";
         foreach($results as $result_raw){
             $result_user_id = $result_raw['user_id'];

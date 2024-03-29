@@ -11,7 +11,7 @@ class Whisper{
         if(! self::$token){
             return 'Auth Token Not Given';
         }
-        $audio_url = 'http://wordpress4all.com/wp-content/uploads/2024/03/Recording-22.mp3';
+        // $audio_url = 'http://wordpress4all.com/wp-content/uploads/2024/03/Recording-22.mp3';
         $curl = curl_init();
         $auth_token = 'E3XZM4XUGUNSXHZTPIMLJ5O1UQIBKKS8XADHO4L1';
         curl_setopt_array($curl, array(
