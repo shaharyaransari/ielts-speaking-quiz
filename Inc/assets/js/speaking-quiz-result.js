@@ -352,12 +352,12 @@ function getPronunciationScore(spIndex){
     questions.forEach(question => {
         let dataArray = question.pronunciation_data;
         // Pronunciation Data is Null 
-        if(!dataArray){
+        if(!Array.isArray(dataArray) || dataArray.length === 0){
             let sentenceAccuracy = 0;
             let sentenceWordCount = 0;
+            // Assuming totalWordCount and totalAccXWords are initialized earlier
             totalWordCount += sentenceWordCount;
-            let senctencAccXWords = sentenceAccuracy * sentenceWordCount;
-            totalAccXWords += senctencAccXWords;
+            totalAccXWords += sentenceAccuracy * sentenceWordCount;
         }else{
             dataArray.forEach(data => { // Each Sentence
                 let sentenceAccuracy = data.NBest[0].PronunciationAssessment.PronScore;
