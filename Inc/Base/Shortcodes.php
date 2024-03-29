@@ -27,6 +27,7 @@ class Shortcodes{
         echo '<pre>';
         return ob_get_clean();
     }
+    
     public function render_ielts_quiz_trigger($atts){
         $args = shortcode_atts( array(
             'id' => null,

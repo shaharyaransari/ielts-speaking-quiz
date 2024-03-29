@@ -735,3 +735,21 @@ width: 100%;
     }
   }
 /* Skeleton Loading End */
+.advanced-editor > textarea{
+    display: none;
+}
+.advanced-editor>button{
+    border: none;
+    background-color:red;
+    padding: 8px 15px;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+.advanced-editor{
+    padding: 1em;
+    background: white;
+    border-radius: 8px;
+}

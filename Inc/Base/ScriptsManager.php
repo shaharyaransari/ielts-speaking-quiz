@@ -48,6 +48,9 @@ class ScriptsManager {
                     $css_file = 'speaking-quiz-builder.css';
                     $js_file = 'speaking-quiz-builder.js';
                     $localize_data = ['ajaxurl' => admin_url('admin-ajax.php'), 'builderUrl' => get_permalink($post->ID)];
+                    wp_enqueue_script('tiny_mce');
+                    wp_enqueue_script('wp-tinymce');
+                    
                     break;
                 case 'speaking-quiz-list.php':
                     $css_file = 'speaking-quiz-archive.css';

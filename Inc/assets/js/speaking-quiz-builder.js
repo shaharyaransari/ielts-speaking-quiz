@@ -349,7 +349,6 @@ function buildItemData( buildFor = 'quiz', itemsContainer = null , returnJson = 
 function save_quiz(status){
     let quizContents = JSON.stringify(quiz_elements.quiz_contents);
     quiz_elements.post_status = status;
-    tinyMCE.triggerSave();
     let form = document.querySelector('#speaking-quiz-info');
     if(! is_IsqFormValid(form)){ 
         display_isq_msg('Fix Errors');
@@ -413,6 +412,7 @@ function saveSpeakingPart(status,formEl){
 }
 
 async function publishSpeakingPart(){
+    tinymce.triggerSave();
     let button = this.event.target;
     let parentContainer = document.querySelector('.speaking-parts');
     let form = this.event.target.parentElement.parentElement // Form
@@ -439,8 +439,13 @@ async function publishSpeakingPart(){
 }
 
 async function updateSpeakingPart(){
+    console.log('Before triggerSave');
+    tinymce.triggerSave();
+    console.log('After triggerSave');
     let button = this.event.target;
     let form = this.event.target.parentElement.parentElement // Form
+    console.log(form.querySelector('textarea').value);
+    // return;
     if(! is_IsqFormValid(form)){ 
         display_isq_msg('Fix Errors', 'error');
         return;
@@ -475,6 +480,7 @@ async function publishSpeakingQuestion(){
     let speakingPartID = button.dataset.speakingPartId;
     let parentContainer = document.querySelector(`#speaking-part-${speakingPartID} .ielts-questions`);
     let form = button.parentElement.parentElement // Form - to Avoid multiple ids confilict there will be different forms with 
+    tinymce.triggerSave();
     if(! is_IsqFormValid(form)){ 
         display_isq_msg('Fix Errors', 'error');
         return;
@@ -504,6 +510,7 @@ async function updateSpeakingQuestion(){
     let speakingPartID = button.dataset.speakingPartId;
     let parentContainer = document.querySelector(`#speaking-part-${speakingPartID} .ielts-questions`);
     let form = button.parentElement.parentElement // Form
+    tinymce.triggerSave();
     if(! is_IsqFormValid(form)){ 
         display_isq_msg('Fix Errors', 'error');
         return;
@@ -583,6 +590,7 @@ function loadExistingQuestionEl(parentSelector){
     }
     init_builder_events();
     init_conditinal_display_fields();
+    tinymce.triggerSave();
 }
 
 async function deleteQuestion(){
@@ -736,4 +744,59 @@ function doRecording(){
     }
 
     RecordAudio(recordingStarted, recordingStopped);
+}
+
+// function convertTextareaToTinyMCE() {
+//     // Ensure TinyMCE is loaded
+//     console.log('worked');
+//     if (typeof tinymce !== 'undefined') {
+//         console.log(tinymce);
+//         // Initialize TinyMCE on all textareas with a specific class
+//         tinymce.init({
+//             selector: 'textarea', // Change this to your textarea's class
+//             // Add your TinyMCE configuration options here
+//         });
+//     } else {
+//         console.error('TinyMCE is not loaded');
+//     }
+// }
+// window.addEventListener('load',()=>{
+//     convertTextareaToTinyMCE();
+// });
+
+// Onclick Event Handler to Toggle Advanced Editor
+function enableAdvancedEditor(){
+    let trigger = this.event.target;
+    this.event.preventDefault();
+    let textarea = trigger.parentElement.querySelector('textarea');
+    let textarea_id = textarea.id;
+    let contentPreview = trigger.parentElement.querySelector('.instructions-content');
+    console.log(trigger.dataset.enabled);
+    
+    if(trigger.dataset.enabled === 'true'){
+        trigger.dataset.enabled = 'false';
+        console.log(trigger.dataset.enabled);
+        tinymce.triggerSave();
+        tinymce.get(textarea_id).remove();
+        contentPreview.style.display = "block";
+        if(textarea.value.trim()==''){
+            contentPreview.innerHTML = 'No Content Added';
+        }else{
+            contentPreview.innerHTML = textarea.value;
+        }
+        trigger.innerText = 'Advanced Editor';
+    }else{
+        trigger.dataset.enabled = 'true';
+        contentPreview.style.display = "none";
+        trigger.innerText = 'Update Content!';
+        if (typeof tinymce !== 'undefined') {
+            console.log(tinymce);
+            // Initialize TinyMCE on all textareas with a specific class
+            tinymce.init({
+                selector: `#${textarea_id}`, // Change this to your textarea's class
+            });
+        } else {
+            console.error('TinyMCE is not loaded');
+        }
+    }
 }

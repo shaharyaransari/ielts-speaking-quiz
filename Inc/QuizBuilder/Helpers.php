@@ -170,7 +170,11 @@ class Helpers {
                                                         <!-- Description  -->
                                                         <div class="isq-field-group">
                                                             <label for="iq_desc"><?php echo __('Question Instructions', ISQ_TXT_DOMAIN); ?></label>
-                                                            <textarea name="iq_desc" id="iq_desc" cols="30" rows="4"></textarea>
+                                                            <div class="advanced-editor">
+                                                                <textarea name="iq_desc" id="new_iq_desc_<?php echo $sp_id; ?>" cols="30" rows="4"></textarea>
+                                                                <div class="instructions-content">No Content Added</div>
+                                                                <button role="button" onclick="enableAdvancedEditor()" data-enabled="false">Edit</button>
+                                                            </div>
                                                         </div>
                                                         <div class="question-audio-field isq-field-group c-display-container">
                                                             <select required class="c-display-trigger" name="question_audio_upload_type" id="question_audio_upload_type" onchange="toggleConditionalFields()">
@@ -340,7 +344,13 @@ class Helpers {
                                                         <!-- Description  -->
                                                         <div class="isq-field-group">
                                                             <label for="sp_desc"><?php echo __('Speaking Part Instructions', ISQ_TXT_DOMAIN); ?></label>
-                                                            <textarea name="sp_desc" id="sp_desc" cols="30" rows="4"><?php echo $desc; ?></textarea>
+                                                            <div class="advanced-editor">
+                                                                <textarea name="sp_desc" id="sp_desc<?php echo $sp_id; ?>" cols="30" rows="4"><?php echo $desc; ?></textarea>
+                                                                <div class="instructions-content">
+                                                                    <?php echo $desc; ?>
+                                                                </div>
+                                                                <button role="button" onclick="enableAdvancedEditor()" data-enabled="false">Edit</button>
+                                                            </div>
                                                         </div>
 
                                                         <!-- Time Field  -->
@@ -452,7 +462,13 @@ class Helpers {
                             <!-- Description  -->
                             <div class="isq-field-group">
                                 <label for="iq_desc"><?php echo __('Question Instructions', ISQ_TXT_DOMAIN); ?></label>
-                                <textarea name="iq_desc" id="iq_desc" cols="30" rows="4"><?php echo $desc; ?></textarea>
+                                <div class="advanced-editor">
+                                    <textarea name="iq_desc" id="iq_desc_<?php echo $iq_id; ?>" cols="30" rows="4"><?php echo $desc; ?></textarea>
+                                    <div class="instructions-content">
+                                        <?php echo $desc; ?>
+                                    </div>
+                                    <button role="button" onclick="enableAdvancedEditor()" data-enabled="false">Edit</button>
+                                </div>
                             </div>
 
                             <div class="question-audio-field isq-field-group c-display-container">
