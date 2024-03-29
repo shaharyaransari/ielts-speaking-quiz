@@ -26,6 +26,6 @@ class Activate{
 
         // Flush Rewrite Rules
 
-        flush_rewrite_rules();
+        // flush_rewrite_rules();
     }
 }
