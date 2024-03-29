@@ -442,32 +442,43 @@ function getTimeString(totalSeconds){
 
 // }
 function positionGError() {
+  // Prevent the event from bubbling up
   this.event.stopPropagation();
 
   let currentEl = this.event.target;
-  let containerEl = document.querySelector('.isq-quiz-content-wrap');
-  if(!containerEl){
-    containerEl = document.querySelector('.result-left-wrapper');
-    if(!containerEl){
-      return;
-    }
+  // Attempt to find the container element
+  let containerEl = document.querySelector('.isq-quiz-content-wrap') || document.querySelector('.result-left-wrapper-inner');
+  if (!containerEl) {
+    console.log('No container element found.');
+    return; // Exit if no container is found
   }
-  // Get .g-error-popup sibling
-  let tooltip = currentEl.querySelector(".g-error-popup");
 
+  // Attempt to find the tooltip element (.g-error-popup or .pronun-error-popup)
+  let tooltip = currentEl.querySelector(".g-error-popup") || currentEl.querySelector('.pronun-error-popup');
+  console.log(tooltip);
   if (!tooltip) {
-    return;
+    return; // Exit if no tooltip is found
   }
 
-  let tooltip_rect = tooltip.getBoundingClientRect();
-  let container_rect = containerEl.getBoundingClientRect();
-  // Check if the tooltip goes beyond the right edge of the container
-  if (tooltip_rect.right > container_rect.right) {
-    let newXposition = tooltip_rect.width - 20;
+  // Calculate bounding rectangles
+  let tooltipRect = tooltip.getBoundingClientRect();
+  console.log("Tooltip Rect", tooltipRect);
+  let containerRect = containerEl.getBoundingClientRect();
+
+  // Adjust tooltip position if it goes beyond the right edge of the container
+  if (tooltipRect.right > containerRect.right) {
+    let newXposition = tooltipRect.width - 20;
     tooltip.style.left = `-${newXposition}px`;
   }
 
-  // You can add more conditions for other edges (left, top, bottom) if needed
+  // Check if the tooltip goes beyond the bottom edge of the container
+  if (tooltipRect.bottom > containerRect.bottom) {
+    let newYposition = -80; // Adjust as necessary for padding/margins
+    tooltip.style.top = `${newYposition}px`;
+	tooltip.style.left = "90%";
+  }
+
+  // Additional edge checks can be added here (left, top)
 }
 
 
