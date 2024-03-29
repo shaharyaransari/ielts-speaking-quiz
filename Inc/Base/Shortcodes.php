@@ -104,48 +104,52 @@ class Shortcodes{
         if(!is_array($results)){
             return $results;
         }
-        echo "<div class='result-list'>";
-        foreach($results as $result_raw){
-            $result_user_id = $result_raw['user_id'];
-            $result = $result_raw['result_obj'];
-            $quiz_id = $result['quiz_id'];
-            $try_number = $result['try_number'];
-            $quiz_title = get_the_title( $quiz_id );
-            $start_date = $result['time'];
-            // if( !$start_date ){
-            //     continue; // for Invalid Results
-            // }
-            // echo '<pre>';
-            // echo var_dump($result);
-            // echo '</pre>';
-            $timestampInSeconds = floor($start_date / 1000);
-            $parts_count = is_array($result['result_elements']) ? count($result['result_elements']) :  0;
-            $date = new \DateTime("@$timestampInSeconds");
-            $formattedDate = $date->format('F j, Y H:i:s');
-            $result_url = ResultsManager::get_quiz_result_page_url($quiz_id,$try_number,$result_user_id);
-            
-            ?>
-            <div class="single-result-wrap">
-                <!-- Title Wrap  -->
-                <div class="r-quiz-title-wrap">
-                    <div class="r-quiz-title">
-                        <?php echo $quiz_title; ?> <span class="r-date-taken">Date: <?php echo $formattedDate; ?></span>
+        if(count($results) > 0){
+            echo "<div class='result-list'>";
+            foreach($results as $result_raw){
+                $result_user_id = $result_raw['user_id'];
+                $result = $result_raw['result_obj'];
+                $quiz_id = $result['quiz_id'];
+                $try_number = $result['try_number'];
+                $quiz_title = get_the_title( $quiz_id );
+                $start_date = $result['time'];
+                // if( !$start_date ){
+                //     continue; // for Invalid Results
+                // }
+                // echo '<pre>';
+                // echo var_dump($result);
+                // echo '</pre>';
+                $timestampInSeconds = floor($start_date / 1000);
+                $parts_count = is_array($result['result_elements']) ? count($result['result_elements']) :  0;
+                $date = new \DateTime("@$timestampInSeconds");
+                $formattedDate = $date->format('F j, Y H:i:s');
+                $result_url = ResultsManager::get_quiz_result_page_url($quiz_id,$try_number,$result_user_id);
+                
+                ?>
+                <div class="single-result-wrap">
+                    <!-- Title Wrap  -->
+                    <div class="r-quiz-title-wrap">
+                        <div class="r-quiz-title">
+                            <?php echo $quiz_title; ?> <span class="r-date-taken">Date: <?php echo $formattedDate; ?></span>
+                        </div>
+                        <div class="r-quiz-meta">
+                            <span>Speaking Parts: <?php echo $parts_count; ?></span>
+                        </div>
                     </div>
-                    <div class="r-quiz-meta">
-                        <span>Speaking Parts: <?php echo $parts_count; ?></span>
+                    <!-- /Title Wrap  -->
+
+                    <!-- Actions  -->
+                    <div class="quiz-actions">
+                        <a href="<?php echo $result_url; ?>" class="quiz-action">Show Result</a>
                     </div>
-                </div>
-                <!-- /Title Wrap  -->
+                    <!-- /Actions  -->
 
-                <!-- Actions  -->
-                <div class="quiz-actions">
-                    <a href="<?php echo $result_url; ?>" class="quiz-action">Show Result</a>
                 </div>
-                <!-- /Actions  -->
-
-            </div>
-        <?php }
-        echo "</div>";
+            <?php }
+            echo "</div>";
+        }else{
+            echo "No Results Found"; // 
+        }
         return ob_get_clean();
     }
 
