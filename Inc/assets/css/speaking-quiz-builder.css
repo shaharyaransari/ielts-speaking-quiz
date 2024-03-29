@@ -297,3 +297,9 @@ background-color: #A70000;
 .recorder-module-wrap{
     position: relative;
 }
+.mce-tinymce{
+    border: 1px solid #7d7d7d;
+}
+.mce-tinymce button:hover{
+    background-color: transparent !important;
+}
