@@ -793,7 +793,12 @@ function enableAdvancedEditor(){
             console.log(tinymce);
             // Initialize TinyMCE on all textareas with a specific class
             tinymce.init({
-                selector: `#${textarea_id}`, // Change this to your textarea's class
+                selector: `#${textarea_id}`,
+                plugins: [
+                    'lists', 'textcolor',
+                    'link', 'charmap', 'fullscreen', 'paste'
+                ],
+                toolbar: 'undo redo | styleselect | bold italic underline | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',// Change this to your textarea's class
             });
         } else {
             console.error('TinyMCE is not loaded');
