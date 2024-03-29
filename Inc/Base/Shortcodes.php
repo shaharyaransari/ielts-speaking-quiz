@@ -72,7 +72,7 @@ class Shortcodes{
         $current_user = wp_get_current_user();
         $args = shortcode_atts( array(
             'user_id' => null,
-            'bb_group_leader' => null, //  BuddyBoss Group Leader? 
+            'bb_group_leader' => null, //  BuddyBoss Group Leader
             'admin' => null
         ), $atts);
         $user_id = $args['user_id'];
@@ -115,7 +115,7 @@ class Shortcodes{
             // echo '<pre>';
             // echo var_dump($result);
             // echo '</pre>';
-            $timestampInSeconds = $start_date / 1000;
+            $timestampInSeconds = floor($start_date / 1000);
             $parts_count = is_array($result['result_elements']) ? count($result['result_elements']) :  0;
             $date = new \DateTime("@$timestampInSeconds");
             $formattedDate = $date->format('F j, Y H:i:s');

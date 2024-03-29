@@ -368,14 +368,15 @@ function getPronunciationScore(spIndex){
             totalWordCount += sentenceWordCount;
             let senctencAccXWords = sentenceAccuracy * sentenceWordCount;
             totalAccXWords += senctencAccXWords;
+        }else{
+            dataArray.forEach(data => { // Each Sentence
+                let sentenceAccuracy = data.NBest[0].PronunciationAssessment.PronScore;
+                let sentenceWordCount = data.NBest[0].Words.length;
+                totalWordCount += sentenceWordCount;
+                let senctencAccXWords = sentenceAccuracy * sentenceWordCount;
+                totalAccXWords += senctencAccXWords;
+            });
         }
-        dataArray.forEach(data => { // Each Sentence
-            let sentenceAccuracy = data.NBest[0].PronunciationAssessment.PronScore;
-            let sentenceWordCount = data.NBest[0].Words.length;
-            totalWordCount += sentenceWordCount;
-            let senctencAccXWords = sentenceAccuracy * sentenceWordCount;
-            totalAccXWords += senctencAccXWords;
-        });
     });
     score = totalAccXWords / totalWordCount;
     score = Math.round(score * 100) / 100;

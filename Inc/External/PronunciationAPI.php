@@ -26,7 +26,7 @@ class PronunciationAPI{
             'reference_text' => $transcript,
         );
         $data = array_merge($user_data, $defaults);
-        $encodedData = http_build_query($data, "", null, PHP_QUERY_RFC3986);
+        $encodedData = http_build_query($data);
         curl_setopt_array($curl, array(
           CURLOPT_URL => 'http://api2.ieltsscience.fun:8080/',
           CURLOPT_RETURNTRANSFER => true,
