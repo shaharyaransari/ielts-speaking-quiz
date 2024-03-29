@@ -215,7 +215,7 @@ function doRecording(){
                     results_obj.result_elements[currentSpIndex]['questions'][currentQuestionIndex].audio_url = response.data.url;
                     results_obj.result_elements[currentSpIndex]['questions'][currentQuestionIndex].audio_length = recordingTime;
                     results_obj.result_elements[currentSpIndex]['questions'][currentQuestionIndex].transcript = transcript;
-                    responseEl.innerHTML = `${transcript} <br> <span class='temp-quiz-msg'>Analysing Grammer Issues...</span>`;
+                    responseEl.innerHTML = `${transcript} <br> <span class='temp-quiz-msg'>Analysing Grammar Issues...</span>`;
                     spRecordedTime = getSpRecordedTime(currentSpIndex);
                     // Save Combined Speaking Part Data 
                     results_obj.result_elements[currentSpIndex]['audio_length'] = spRecordedTime;
