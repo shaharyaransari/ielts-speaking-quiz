@@ -8,7 +8,6 @@ $author_id = $author->ID;
 if(current_user_can('manage_options')){
    $author_id = null; 
 }
-echo var_dump($author_id);
 $args = array(
     'post_type' => Quiz::get_post_type_id(),
     'posts_per_page' => 10,
@@ -32,7 +31,6 @@ $query = new WP_Query($args);
         <?php 
         while ($query->have_posts(  )){
             $query->the_post();
-            echo var_dump(get_post_field( 'post_author', get_the_ID() ));
             $TempLoader->get_template_part('content', 'speaking-quiz' );
         }
         ?>
