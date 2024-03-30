@@ -1,6 +1,6 @@
 .quiz-result-page{
     padding: 2em;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Roboto,Arial,Helvetica,sans-serif;
     z-index: 10;
 }
 .quiz-result-wrapper{
@@ -87,29 +87,30 @@
 .result-left-wrapper{
     flex-grow: 1;
     padding: 2em;
-    border-right: 1px solid #C1C1C1;
-    width: 50%;
+    border-right: 1px solid #D6D9DD;
+    width: 60%;
     padding-bottom: 100px;
     overflow: auto;
 }
 .result-right-wrapper{
     flex-grow: 1;
     padding: 2em;
-    width: 50%;
+    width: 40%;
     padding-bottom: 100px;
     overflow: auto;
 }
 .result-questions-list-wrap{
-    font-size: 14px;
+    font-size: 16px;
 }
 .result-left-wrapper-inner{
     padding-bottom: 350px;
 }
 .result-left-wrapper-inner .speaking-part-title{
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
 }
 .result-questions-list-wrap .result-question .question-title{
+    font-size: 18px;
     font-weight: bold;
 }
 .result-questions-list-wrap .result-question{
@@ -120,10 +121,12 @@
 }
 .score-boxes{
     display: flex;
-    gap: 5px;
+    justify-content: center;
+    gap: 7px;
 }
 .score-box{
-    padding: 8px 12px;
+    flex: 1;
+    padding: 11px 10px;
     border-radius: 12px;
     text-align: center;
     background-color: #FBFBFD;
@@ -152,6 +155,8 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    justify-content: center;
+    font-size: 18px;
 }
 .score-box-score{
     font-weight: bold;
@@ -212,10 +217,11 @@
 .score-box:hover .score-box-score
 {
     color: white;
+    font-size: 16px;
 }
 .result-suggestions-wrapper{
     margin-top: 30px;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 
@@ -281,11 +287,12 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    font-size: 16px;
 }
 .result-suggestion{
     padding: 15px 18px;
     border-radius: 8px;
-    border: 1px solid #C1C1C1;
+    border: 1px solid #D6D9DD;
     display: flex;
     flex-direction: column;
     gap: 10px;
