@@ -75,11 +75,19 @@ get_header(); ?>
                 <!-- Description  -->
                 <div class="isq-field-group">
                     <!-- <label for="quiz_desc"><?php echo __('Quiz Instructions', ISQ_TXT_DOMAIN); ?></label> -->
-                    <?php wp_editor( $quiz_desc , 'quiz_desc' ,array(
-                        'media_buttons' => false,
-                        'drag_drop_upload' => false,
-                        'textarea_rows' => 5
-                    )); ?>
+                    <!-- <textarea id="quiz_desc"><?php echo $quiz_desc; ?></textarea> -->
+
+                    <div class="advanced-editor">
+                        <textarea name="quiz_desc" id="quiz_desc" cols="30" rows="4"><?php echo $quiz_desc; ?></textarea>
+                        <div class="instructions-content">
+                            <?php if(trim($quiz_desc) != false){
+                            echo $quiz_desc;
+                            }else{
+                                echo 'No Content Added';
+                            } ?>
+                        </div>
+                        <button role="button" onclick="enableAdvancedEditor()" data-enabled="false">Edit</button>
+                    </div>
                 </div>
 
                 <div class="quiz-actions-wrapper">

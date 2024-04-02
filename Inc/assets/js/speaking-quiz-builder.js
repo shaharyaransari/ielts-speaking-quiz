@@ -366,6 +366,7 @@ function save_quiz(status){
 
 // Triggered by onlick event
 function publishSpeakingQuiz(savenew = false){
+    tinymce.triggerSave();
     let button = this.event.target;
     let nonce = button.dataset.nonce;
     let newId = button.dataset.quizId;
@@ -385,6 +386,7 @@ function publishSpeakingQuiz(savenew = false){
 }
 // Triggered by onlick event
 function saveSpeakingQuizDraft(savenew = false){
+    tinymce.triggerSave();
     let button = this.event.target;
     let nonce = button.dataset.nonce;
     let newId = button.dataset.quizId;
@@ -746,24 +748,6 @@ function doRecording(){
     RecordAudio(recordingStarted, recordingStopped);
 }
 
-// function convertTextareaToTinyMCE() {
-//     // Ensure TinyMCE is loaded
-//     console.log('worked');
-//     if (typeof tinymce !== 'undefined') {
-//         console.log(tinymce);
-//         // Initialize TinyMCE on all textareas with a specific class
-//         tinymce.init({
-//             selector: 'textarea', // Change this to your textarea's class
-//             // Add your TinyMCE configuration options here
-//         });
-//     } else {
-//         console.error('TinyMCE is not loaded');
-//     }
-// }
-// window.addEventListener('load',()=>{
-//     convertTextareaToTinyMCE();
-// });
-
 // Onclick Event Handler to Toggle Advanced Editor
 function enableAdvancedEditor(){
     let trigger = this.event.target;
@@ -805,3 +789,20 @@ function enableAdvancedEditor(){
         }
     }
 }
+
+// window.onload = function(e){
+//     if (typeof tinymce !== 'undefined') {
+//         console.log(tinymce);
+//         // Initialize TinyMCE on all textareas with a specific class
+//         tinymce.init({
+//             selector: `#quiz_desc`,
+//             plugins: [
+//                 'lists', 'textcolor',
+//                 'link', 'charmap', 'fullscreen', 'paste'
+//             ],
+//             toolbar: 'undo redo | styleselect | bold italic underline | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',// Change this to your textarea's class
+//         });
+//     } else {
+//         console.error('TinyMCE is not loaded');
+//     }
+// }
