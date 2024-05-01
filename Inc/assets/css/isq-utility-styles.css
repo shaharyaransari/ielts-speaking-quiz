@@ -398,6 +398,7 @@ width: 100%;
     display: flex !important;
     gap: 5px;
     margin-top: 10px;
+    flex-wrap: wrap;
 }
 .g-error-replacements span{
     display: block;
