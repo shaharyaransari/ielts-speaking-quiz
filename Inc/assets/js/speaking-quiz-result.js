@@ -927,8 +927,8 @@ function processGrammerSuggestions(inputText) {
         const match = line.match(/"([^"]+)" -> "([^"]+)"/);
         if (match) {
             const suggestionNumber = suggestions.length + 1;
-            const original = unescapeString(match[1].trim());
-            const suggestion = unescapeString(match[2].trim());
+            const original = match[1].replace(/\\(.)/g, '$1').trim(); // Remove Backslashes
+            const suggestion = match[2].replace(/\\(.)/g, '$1').trim(); // Remove Backslashes
             
             const explanationLine = lines[index + 1];
             const replacements = extractGrammerReplacements(explanationLine);
@@ -944,10 +944,6 @@ function processGrammerSuggestions(inputText) {
     });
 
     return suggestions;
-}
-// Remove Backslashes from strings
-function unescapeString(str) {
-    return JSON.parse(`"${str}"`);
 }
 
 function extractGrammerReplacements(explanationLine) {
