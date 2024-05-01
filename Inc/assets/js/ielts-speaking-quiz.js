@@ -447,34 +447,49 @@ function positionGError() {
   let currentEl = this.event.target;
   // Attempt to find the container element
   let containerEl = document.querySelector('.isq-quiz-content-wrap') || document.querySelector('.result-left-wrapper-inner');
+  console.log(containerEl);
   if (!containerEl) {
-    console.log('No container element found.');
-    return; // Exit if no container is found
+      console.log('No container element found.');
+      return; // Exit if no container is found
+  }
+
+  let containerRect = containerEl.getBoundingClientRect();
+  // If containerRect returns zeros, calculate containerRect.right based on viewport
+  if (containerRect.width === 0 && containerRect.height === 0) {
+      const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      containerRect = {
+          top: 0,
+          right: viewportWidth / 2, // Set containerRect.right to half viewport width
+          bottom: viewportHeight,
+          left: 0,
+          width: viewportWidth,
+          height: viewportHeight
+      };
   }
 
   // Attempt to find the tooltip element (.g-error-popup or .pronun-error-popup)
   let tooltip = currentEl.querySelector(".g-error-popup") || currentEl.querySelector('.pronun-error-popup');
   console.log(tooltip);
   if (!tooltip) {
-    return; // Exit if no tooltip is found
+      return; // Exit if no tooltip is found
   }
 
   // Calculate bounding rectangles
   let tooltipRect = tooltip.getBoundingClientRect();
   console.log("Tooltip Rect", tooltipRect);
-  let containerRect = containerEl.getBoundingClientRect();
 
   // Adjust tooltip position if it goes beyond the right edge of the container
   if (tooltipRect.right > containerRect.right) {
-    let newXposition = tooltipRect.width - 20;
-    tooltip.style.left = `-${newXposition}px`;
+      let newXposition = tooltipRect.width - 20;
+      tooltip.style.left = `-${newXposition}px`;
   }
 
   // Check if the tooltip goes beyond the bottom edge of the container
   if (tooltipRect.bottom > containerRect.bottom) {
-    let newYposition = -80; // Adjust as necessary for padding/margins
-    tooltip.style.top = `${newYposition}px`;
-	tooltip.style.left = "90%";
+      let newYposition = -80; // Adjust as necessary for padding/margins
+      tooltip.style.top = `${newYposition}px`;
+      tooltip.style.left = "90%";
   }
 
   // Additional edge checks can be added here (left, top)
