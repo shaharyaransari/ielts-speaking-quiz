@@ -447,7 +447,7 @@ function positionGError() {
   let currentEl = this.event.target;
   // Attempt to find the container element
   let containerEl = document.querySelector('.isq-quiz-content-wrap') || document.querySelector('.result-left-wrapper-inner');
-  console.log(containerEl);
+  // console.log(containerEl);
   if (!containerEl) {
       console.log('No container element found.');
       return; // Exit if no container is found
@@ -470,14 +470,14 @@ function positionGError() {
 
   // Attempt to find the tooltip element (.g-error-popup or .pronun-error-popup)
   let tooltip = currentEl.querySelector(".g-error-popup") || currentEl.querySelector('.pronun-error-popup');
-  console.log(tooltip);
+  // console.log(tooltip);
   if (!tooltip) {
       return; // Exit if no tooltip is found
   }
 
   // Calculate bounding rectangles
   let tooltipRect = tooltip.getBoundingClientRect();
-  console.log("Tooltip Rect", tooltipRect);
+  // console.log("Tooltip Rect", tooltipRect);
 
   // Adjust tooltip position if it goes beyond the right edge of the container
   if (tooltipRect.right > containerRect.right) {

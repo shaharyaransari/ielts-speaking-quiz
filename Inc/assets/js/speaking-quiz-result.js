@@ -4,7 +4,9 @@ let results_obj = wpdata.result; // Get Result Data
 let currentSpeakingPart = null;
 let currentSpIndex = null;
 let isResultReady = results_obj.result_ready; 
+// let isResultReady = false; 
 let isPronunDataReady = results_obj.pronun_data_ready;
+// let isPronunDataReady = false;
 let currentActiveTab = null;
 // Initialize Page
 initResultPage();
@@ -432,10 +434,9 @@ function loadQuestionList(category){
     }
 
     let playerTemp = document.querySelector('#audio-player');  
-    if(category == 'grammer' || category == 'vocabulary'){
-        let selector = 'grammer-vocabulary';
-        // Load Grammer Questions List
-        let questionTemplate = document.querySelector(`#${selector}-question`);
+    if(category == 'vocabulary'){
+        // Load Vocabulary Questions List
+        let questionTemplate = document.querySelector(`#${category}-question`);
         let questionListWrapper = document.createElement('div');
         questionListWrapper.classList.add('result-questions-list');
         let questions = currentSpeakingPart['questions'];
@@ -446,9 +447,9 @@ function loadQuestionList(category){
             let qData = questions[x].post_data;
             let player = playerTemp.content.cloneNode(true);
             let questionSr = x + 1;
-            let attempted = questions[x]['formatted_transcript'];
-            let fTranscript = questions[x]['formatted_transcript'] ?? '';
+            let vftranscript = questions[x]['vformatted_transcript'] ?? '';
             let transcript = questions[x]['transcript'] ?? '';
+            let finalTranscript = vftranscript || transcript || '';
             let qId = questions[x]['question_id'];
             let audio_length = questions[x]['audio_length'];
             let timeString = getTimeString(audio_length)
@@ -456,7 +457,7 @@ function loadQuestionList(category){
             player.querySelector('audio').src = audio_url;
             player.querySelector('.recording-log').innerText = timeString;
             qNode.querySelector('.question-title').innerHTML = `Question ${questionSr} : ${qData.post_content}`;
-            qNode.querySelector('.question-response').innerHTML = `${fTranscript}`;
+            qNode.querySelector('.question-response').innerHTML = `${finalTranscript}`;
             qNode.querySelector('.player').innerHTML = '';
             qNode.querySelector('.player').appendChild(player);
             questionListWrapper.appendChild(qNode);
@@ -466,6 +467,38 @@ function loadQuestionList(category){
         wrapper.innerHTML = '';
         wrapper.appendChild(questionListWrapper);
         
+    }else if(category == 'grammer'){
+    // Load Grammer Questions List
+    let questionTemplate = document.querySelector(`#${category}-question`);
+    let questionListWrapper = document.createElement('div');
+    questionListWrapper.classList.add('result-questions-list');
+    let questions = currentSpeakingPart['questions'];
+    // Prepare Question Template
+    for(let x = 0; x < questions.length; x++){
+        // Prepate Question Data
+        let qNode = questionTemplate.content.cloneNode(true);
+        let qData = questions[x].post_data;
+        let player = playerTemp.content.cloneNode(true);
+        let questionSr = x + 1;
+        let attempted = questions[x]['formatted_transcript'];
+        let fTranscript = questions[x]['formatted_transcript'] ?? '';
+        let transcript = questions[x]['transcript'] ?? '';
+        let qId = questions[x]['question_id'];
+        let audio_length = questions[x]['audio_length'];
+        let timeString = getTimeString(audio_length)
+        let audio_url = questions[x]['audio_url'];
+        player.querySelector('audio').src = audio_url;
+        player.querySelector('.recording-log').innerText = timeString;
+        qNode.querySelector('.question-title').innerHTML = `Question ${questionSr} : ${qData.post_content}`;
+        qNode.querySelector('.question-response').innerHTML = `${fTranscript}`;
+        qNode.querySelector('.player').innerHTML = '';
+        qNode.querySelector('.player').appendChild(player);
+        questionListWrapper.appendChild(qNode);
+    }
+
+    // Update UI
+    wrapper.innerHTML = '';
+    wrapper.appendChild(questionListWrapper);
     }else if(category == 'pronunciation'){
         
         // Load pronunciation Questions List
@@ -767,11 +800,29 @@ async function loadSuggestions(category){
     }
     let wrapperNode = document.querySelector(`#${category}-suggestions`);
     let suggestionNode = document.querySelector(`#${category}-suggestion-temp`);
-    if(category == 'grammer' || category == 'vocabulary'){
+    if(category == 'grammer'){
+        // Load Vocbulary Suggestions List
+        let sWrap = wrapperNode.content.cloneNode(true);
+        let suggestions = getGrammerSuggestionsData(currentSpeakingPart);
+        console.log(suggestions);
+        if(suggestions.length > 0){
+            suggestions.forEach(suggestion => {
+                let sNode = suggestionNode.content.cloneNode(true);
+                sNode.querySelector('.orignal-txt').innerText = suggestion.shortMessage;
+                sNode.querySelector('.suggestion-txt').innerText = suggestion.errorText;
+                sNode.querySelector('.suggestion-exp').innerHTML = `<span><strong>Context:</strong> ${suggestion.context}</span><br><span><strong>Explaination:</strong> ${suggestion.explanation}</span><div class="g-error-replacements">${suggestion.suggestions}</span>`;
+                sWrap.querySelector('.result-suggestions-wrap-inner').appendChild(sNode);
+            });
+        }else{
+            sWrap.innerHTML = 'No Suggestions Found';
+        }
+        wrapper.innerHTML = '';
+        wrapper.appendChild(sWrap);
+        
+    }else if(category == 'vocabulary'){
         // Load Vocbulary Suggestions List
         let sWrap = wrapperNode.content.cloneNode(true);
         let suggestions = await getVocabularySuggestionsData(currentSpeakingPart.transcript);
-        // console.log(suggestions);
         if(suggestions.length > 0){
             suggestions.forEach(suggestion => {
                 let sNode = suggestionNode.content.cloneNode(true);
@@ -785,6 +836,10 @@ async function loadSuggestions(category){
         }
         wrapper.innerHTML = '';
         wrapper.appendChild(sWrap);
+
+        // We have Suggestions Data Ready We can highlight errors in Question List Here
+        markVocabErrors(currentSpeakingPart);
+        loadQuestionList(category);
         
     }else if(category == 'pronunciation'){
         
@@ -887,8 +942,8 @@ async function getVocabularySuggestionsData(transcript, speakingPart = currentSp
         display_isq_msg('No Questions Were Attempted in This part');
         return [];
     }
-    if(speakingPart.grammer_suggestions){
-        return speakingPart.grammer_suggestions;
+    if(speakingPart.vocabulary_suggestions){
+        return speakingPart.vocabulary_suggestions;
     }else{
         // Should be Loaded by Open AI
         let formData = new FormData();
@@ -907,18 +962,18 @@ async function getVocabularySuggestionsData(transcript, speakingPart = currentSp
                 display_isq_msg('Something Went Wrong', 'error');
             }
         });
-        let suggestionsObj = processGrammerSuggestions(OpenAiResponse);
+        let suggestionsObj = processVocabularySuggestions(OpenAiResponse);
         // Save Suggestion 
-        results_obj.result_elements[spIndex].grammer_suggestions = suggestionsObj;
+        results_obj.result_elements[spIndex].vocabulary_suggestions = suggestionsObj;
         return suggestionsObj;
     }
 }
 /**
- * Function to Process Response From Open Ai to Extract Grammer Suggestions Data
- * @param {*} apiResponse 
- * @returns 
+ * Function to Process Response From Open Ai to Extract Grammar (Actually Vocabulary) Suggestions Data
+ * @param {string} inputText - Input text containing grammar suggestions
+ * @returns {Array} Array of objects containing grammar suggestions, their corresponding sentences, and replacements
  */
-function processGrammerSuggestions(inputText) {
+function processVocabularySuggestions(inputText) {
     const suggestions = [];
     
     const lines = inputText.split('\n').filter(line => line.trim() !== '');
@@ -933,12 +988,17 @@ function processGrammerSuggestions(inputText) {
             const explanationLine = lines[index + 1];
             const replacements = extractGrammerReplacements(explanationLine);
 
+            // Extract the sentence
+            const sentenceLine = lines[index + 2];
+            const sentence = sentenceLine && sentenceLine.includes("Sentence:") ? sentenceLine.trim().substring(9) : '';
+
             suggestions.push({
                 suggestionNumber,
                 original,
                 suggestion,
                 explanation: explanationLine ? explanationLine.trim().substring(12) : '',
                 replacements,
+                sentence, // Include the sentence directly in the suggestion object
             });
         }
     });
@@ -1192,6 +1252,95 @@ function markFluencyErrors(q){
     return {
         fluencyErrorsTranscript : fluencyErrorsTranscript
     };
+}
+
+
+function markVocabErrors(sp = currentSpeakingPart){
+    // Index of Current SP in result_obj
+    let spIndex = results_obj.result_elements.findIndex(element => element.speaking_part_id == sp.speaking_part_id);
+    let suggestions = sp.vocabulary_suggestions;
+    sp.questions.forEach((q,qIndex)=>{
+        // console.log(`Question Number: ${qIndex + 1} Speaking Part ${sp.speaking_part_id}`);
+        // console.log(suggestions);
+        let transcript = q.transcript.trim();
+        let occurrences = 0;
+        if(transcript && transcript !=''){
+            let modifiedTranscript = transcript;
+            suggestions.forEach(s =>{
+                let sentence = s.sentence; // keep it as it is
+                sentence = sentence.replace(/["\\]/g, '').replace(/\.{3}/g, '').replace(/[.,]+$/, '').trim();
+                
+                let words = sentence.split(/\s+/);
+                let explanation = s.explanation;
+                let original = s.original.trim();
+                let suggestion = s.suggestion;
+                let allWordsPresent = words.every(word => transcript.includes(word));
+                if(transcript.toLowerCase().includes(sentence.toLowerCase())){
+                    // Create a regular expression to match all occurrences of the original sentence
+                    let regex = new RegExp(original, 'gi');
+                    // Replace each occurrence with "__PLACEHOLDER__{{occurrence_number}}"
+                    modifiedTranscript = modifiedTranscript.replace(regex, match => {
+                        occurrences++;
+                        return `__PLACEHOLDER__${occurrences}`;
+                    });
+                }else{
+                    console.log(sentence,'\n',transcript);
+                }
+            });
+
+            suggestions.forEach((s,index) =>{
+                let number = index + 1;
+                let placehoder = `__PLACEHOLDER__${number}`;
+                // console.log(`Placeholder : ${placehoder}`);
+                let sentence = s.sentence; // keep it as it is
+                let original = s.original;
+                sentence = sentence.replace(/["\\]/g, '').replace(/\.{3}/g, '').replace(/[.,]+$/, '').trim();
+                if(transcript.includes(sentence)){
+                    let regex = new RegExp(placehoder, 'gi');
+                    // Replace each occurrence with "__PLACEHOLDER__{{occurrence_number}}"
+                    modifiedTranscript = modifiedTranscript.replace(regex, match => {
+                        occurrences++;
+                        return `<span class="g-error-wrap" data-id="error-${occurrences}" onmouseover="positionGError()">
+                        <span class="g-error">${original}</span>
+                            <span class="g-error-popup">
+                                <span class="g-error-long-msg">${s.explanation}</span>
+                                <span class="g-error-replacements"><span>${s.suggestion}</span></span>
+                            </span>
+                        </span>`;
+                    });
+                }
+            });
+        results_obj.result_elements[spIndex].questions[qIndex].vformatted_transcript = modifiedTranscript;
+        }
+    });
+}
+
+function getGrammerSuggestionsData(sp = currentSpeakingPart){
+    let spIndex = results_obj.result_elements.findIndex(element => element.speaking_part_id == sp.speaking_part_id);
+    let suggestions = [];
+    sp.questions.forEach((q,qIndex) => {
+        let corrections = q.corrections;
+        corrections.forEach((c,cIndex) => {
+            let replacements = c.replacements;
+            let replacementsMarkup = '';
+            let errorText  = q.transcript.substring(c.offset, c.offset + c.length);
+            replacements.forEach(r =>{
+                replacementsMarkup+= `<span>${r.value}</span>`;
+            });
+            console.log(c.context.text);
+            suggestions.push({
+                questionNumber: qIndex,
+                suggestionNumber: cIndex,
+                suggestions: replacementsMarkup,
+                explanation: c.message,
+                shortMessage: c.shortMessage,
+                errorText: errorText,
+                context: c.context.text
+            });
+        })
+    });
+    results_obj.result_elements[spIndex].grammer_suggestions = suggestions;
+    return results_obj.result_elements[spIndex].grammer_suggestions;
 }
 
 function playAudioSegment(audioUrl, offset, duration) {

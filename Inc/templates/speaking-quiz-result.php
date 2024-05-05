@@ -524,8 +524,8 @@ if(isset($_REQUEST['quiz']) && isset($_REQUEST['try'])){
         Result Footer Will Contain Navigation
     </div>
 
-    <!-- Grammer Vocab Question Template  -->
-    <template id="grammer-vocabulary-question">
+    <!-- Vocab Question Template  -->
+    <template id="vocabulary-question">
         <div class="result-question">
             <div class="question-title">
                 Question 1:  What is Your Favorite Food
@@ -547,7 +547,32 @@ if(isset($_REQUEST['quiz']) && isset($_REQUEST['try'])){
             <!-- /Response Wrap  -->
         </div>
     </template>
-    <!-- Grammer Vocab Question Template  -->
+    <!-- Vocabulary Question Template  -->
+
+    <!-- Grammer Question Template  -->
+    <template id="grammer-question">
+        <div class="result-question">
+            <div class="question-title">
+                Question 1:  What is Your Favorite Food
+            </div>
+            <!-- Response Wrap  -->
+            <div class="question-response-wrap">
+
+                <!-- Player  -->
+                <div class="player">Player</div>
+                <!-- /Player  -->
+
+                <!-- Transcript  -->
+                <div class="question-response">
+                    Question Transcript and Response Here
+                </div>
+                <!-- Transcript  -->
+
+            </div>
+            <!-- /Response Wrap  -->
+        </div>
+    </template>
+    <!-- Grammer Question Template  -->
     
     <!-- Suggestions Wrap For Grammer  -->
     <template id="grammer-suggestions">

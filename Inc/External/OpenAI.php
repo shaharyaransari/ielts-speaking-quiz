@@ -79,21 +79,27 @@ class OpenAI {
             Errors and Improvements:
             1. "[original word or phrase]" -&gt; "[improved word or phrase]"
             Explanation: [Explanation].
+            Sentence: [orignal incorrect sentence containing error]
+            2. "[original word or phrase]" -&gt; "[improved word or phrase]"
+            Explanation: [Explanation].
+            Sentence: [orignal incorrect sentence containing error]
             
             For example:
             Errors and Improvements:
             1. "Often people think" -&gt; "Frequently, individuals believe"
             Explanation: Replacing "Often people think" with "Frequently, individuals believe" enhances the formal tone of the sentence by using more sophisticated vocabulary.
+            Sentence: [orignal incorrect sentence containing error]
             2. "students must take all subjects at school" -&gt; "students are required to study all academic disciplines in school"
             Explanation: Replacing "students must take all subjects at school" with "students are required to study all academic disciplines in school" maintains clarity while employing a more precise and elaborate description.
+            Sentence: [orignal incorrect sentence containing error]
             3. "Everybody thinks that" -&gt; "Most people believe that"
             Explanation: Replacing "Everybody thinks that" with "Most people believe that" avoids overgeneralization, making the statement more precise and academically appropriate.
-            
+            Sentence: [orignal incorrect sentence containing error]
             Now, let's proceed. Please review the following essay and provide your recommendations and explanations:
             
             "$content"
             
-            List the errors that you noticed here, suggest better and more advanced alternatives, and provide brief explanations for each recommendation. Do NOT point out entire sentences unless neccessary.
+            List the errors that you noticed here, suggest better and more advanced alternatives, and provide brief explanations for each recommendation. Do NOT point out entire sentences unless neccessary (Except in Sentence line and sentence line should be with each error and should mention the incorrect sentence and not corrected one).
             
             Errors and Improvements:
         EOF;
