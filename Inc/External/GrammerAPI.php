@@ -25,7 +25,7 @@ class GrammerAPI{
                 'username' => $username,
                 'apiKey' => $apiKey,
                 'enabledOnly' => $enabledOnly,
-                'disabledCategories' => 'PUNCTUATION',
+                'disabledCategories' => 'PUNCTUATION,CASING,TYPOGRAPHY',
                 'level' => $level
             );
             $user_data = array(
