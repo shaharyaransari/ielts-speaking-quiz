@@ -253,8 +253,17 @@ function doRecording(){
                                     let placehoder = `PLACEHOLDER_${i}`;
                                     let incorrectText = transcript.substr(offset,length);
 // 									console.log(offset,length,incorrectText);
-                                   
-                                    formattedTranscript = formattedTranscript.replace(incorrectText, placehoder);
+                                    let regex = new RegExp(`\\b${incorrectText}\\b`, 'gi');
+                                    formattedTranscript = formattedTranscript.replace(regex, (match)=>{
+                                    let stringOccurences = [...transcript.matchAll(regex)];
+                                        
+                                        for(let k = 0; k < stringOccurences.length; k++){
+                                            if(stringOccurences[k].index == offset){
+                                                return placehoder
+                                            }
+                                        }
+                                        return match;
+                                    });
                                 }
                             }
 							if(corrections.length > 0){
