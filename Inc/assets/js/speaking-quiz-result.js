@@ -1263,7 +1263,7 @@ function markVocabErrors(sp = currentSpeakingPart){
         // console.log(`Question Number: ${qIndex + 1} Speaking Part ${sp.speaking_part_id}`);
         // console.log(suggestions);
         let transcript = q.transcript.trim();
-        let occurrences = 0;
+        // let occurrences = 0;
         if(transcript && transcript !=''){
             let modifiedTranscript = transcript;
             suggestions.forEach(s =>{
@@ -1280,8 +1280,8 @@ function markVocabErrors(sp = currentSpeakingPart){
                     let regex = new RegExp(original, 'gi');
                     // Replace each occurrence with "__PLACEHOLDER__{{occurrence_number}}"
                     modifiedTranscript = modifiedTranscript.replace(regex, match => {
-                        occurrences++;
-                        return `__PLACEHOLDER__${occurrences}`;
+                        // occurrences++;
+                        return `__PLACEHOLDER__${s.suggestionNumber}`;
                     });
                 }else{
                     console.log(sentence,'\n',transcript);
@@ -1289,18 +1289,18 @@ function markVocabErrors(sp = currentSpeakingPart){
             });
 
             suggestions.forEach((s,index) =>{
-                let number = index + 1;
-                let placehoder = `__PLACEHOLDER__${number}`;
+                // let number = index + 1;
+                let placehoder = `__PLACEHOLDER__${s.suggestionNumber}`;
                 // console.log(`Placeholder : ${placehoder}`);
                 let sentence = s.sentence; // keep it as it is
                 let original = s.original;
                 sentence = sentence.replace(/["\\]/g, '').replace(/\.{3}/g, '').replace(/[.,]+$/, '').trim();
-                if(transcript.includes(sentence)){
+                if(transcript.toLowerCase().includes(sentence.toLowerCase())){
                     let regex = new RegExp(placehoder, 'gi');
                     // Replace each occurrence with "__PLACEHOLDER__{{occurrence_number}}"
                     modifiedTranscript = modifiedTranscript.replace(regex, match => {
-                        occurrences++;
-                        return `<span class="g-error-wrap" data-id="error-${occurrences}" onmouseover="positionGError()">
+                        // occurrences++;
+                        return `<span class="g-error-wrap" data-id="error-${s.suggestionNumber}" onmouseover="positionGError()">
                         <span class="g-error">${original}</span>
                             <span class="g-error-popup">
                                 <span class="g-error-long-msg">${s.explanation}</span>
