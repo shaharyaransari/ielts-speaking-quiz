@@ -244,26 +244,18 @@ function doRecording(){
                             results_obj.result_elements[currentSpIndex]['questions'][currentQuestionIndex].corrections = corrections;
                             results_obj.result_elements[currentSpIndex]['questions'][currentQuestionIndex].gpt_input  = formatCorrectionsForChatGPT(corrections);
                             let formattedTranscript = transcript;
+                            console.log(corrections);
                             if(corrections.length > 0){
                                 for(let i=0; i < corrections.length ; i++){
-                                
 									let offset = corrections[i].offset;
 									let length = corrections[i].length;
 // 									console.log(offset,length);
                                     let placehoder = `PLACEHOLDER_${i}`;
                                     let incorrectText = transcript.substr(offset,length);
 // 									console.log(offset,length,incorrectText);
-                                    let regex = new RegExp(`\\b${incorrectText}\\b`, 'gi');
-                                    formattedTranscript = formattedTranscript.replace(regex, (match)=>{
-                                    let stringOccurences = [...transcript.matchAll(regex)];
-                                        
-                                        for(let k = 0; k < stringOccurences.length; k++){
-                                            if(stringOccurences[k].index == offset){
-                                                return placehoder
-                                            }
-                                        }
-                                        return match;
-                                    });
+                                    let regex = new RegExp(`\\b${incorrectText}\\b`, 'i');
+                                    formattedTranscript = formattedTranscript.replace(regex, placehoder);
+                                    console.log(formattedTranscript);
                                 }
                             }
 							if(corrections.length > 0){

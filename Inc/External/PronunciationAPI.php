@@ -7,8 +7,6 @@ class PronunciationAPI{
         self::$speech_key = get_option('isq_pronun_key', null);
     }
     public static function get_pronunciation_data($audioUrl,$transcript){
-        //$audioUrl = 'http://wordpress4all.com/wp-content/uploads/2024/03/wrong-pronun-1.mp3';
-        //$transcript = "I seen her at the store yesterday. Me and her talked about the upcoming party. She don't know what to wear yet, but I told her to not worry.";
         $speech_key = self::$speech_key;
         if(!$speech_key){
             return null;
