@@ -79,7 +79,6 @@ function saveResultData(){
 async function preparePronunciationData(){
     let pronunData =  await Promise.all(results_obj.result_elements.map(async (sp, index) => {
         let data = await getPronunciationData(sp, index);
-        console.log(data);
         if(data){
             results_obj.pronun_data_ready = true;
             isPronunDataReady = results_obj.pronun_data_ready;
@@ -804,13 +803,15 @@ async function loadSuggestions(category){
         // Load Vocbulary Suggestions List
         let sWrap = wrapperNode.content.cloneNode(true);
         let suggestions = getGrammerSuggestionsData(currentSpeakingPart);
-        console.log(suggestions);
         if(suggestions.length > 0){
             suggestions.forEach(suggestion => {
                 let sNode = suggestionNode.content.cloneNode(true);
-                sNode.querySelector('.orignal-txt').innerText = suggestion.shortMessage;
-                sNode.querySelector('.suggestion-txt').innerText = suggestion.errorText;
-                sNode.querySelector('.suggestion-exp').innerHTML = `<span><strong>Context:</strong> ${suggestion.context}</span><br><span><strong>Explaination:</strong> ${suggestion.explanation}</span><div class="g-error-replacements">${suggestion.suggestions}</span>`;
+                sNode.querySelector('.orignal-txt').innerText = suggestion.errorText;
+                if(suggestion.shortMessage.trim() == ''){
+                    sNode.querySelector('.saperator').innerText = '';
+                }
+                sNode.querySelector('.g-suggestion-txt').innerText = suggestion.shortMessage;
+                sNode.querySelector('.suggestion-exp').innerHTML = `<span>${suggestion.explanation}</span><div class="g-error-replacements">${suggestion.suggestions}</span>`;
                 sWrap.querySelector('.result-suggestions-wrap-inner').appendChild(sNode);
             });
         }else{
@@ -1033,8 +1034,6 @@ function getPronSuggestionsData(sp) {
             }
         });
     });
-
-    console.log('Pronunciation Errors', pronunErrors);
     return pronunErrors;
 }
 
@@ -1283,9 +1282,10 @@ function markVocabErrors(sp = currentSpeakingPart){
                         // occurrences++;
                         return `__PLACEHOLDER__${s.suggestionNumber}`;
                     });
-                }else{
-                    console.log(sentence,'\n',transcript);
                 }
+                // else{
+                //     console.log(sentence,'\n',transcript);
+                // }
             });
 
             suggestions.forEach((s,index) =>{
@@ -1327,7 +1327,6 @@ function getGrammerSuggestionsData(sp = currentSpeakingPart){
             replacements.forEach(r =>{
                 replacementsMarkup+= `<span>${r.value}</span>`;
             });
-            console.log(c.context.text);
             suggestions.push({
                 questionNumber: qIndex,
                 suggestionNumber: cIndex,

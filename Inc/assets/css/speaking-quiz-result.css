@@ -326,6 +326,9 @@
     width: 8px;
     margin-right: 3px;
 }
+.g-suggestion-txt{
+    color:#929292;
+}
 
 /* Player Styles  */
 .question-response-wrap .player .recording-preview-wrap{
