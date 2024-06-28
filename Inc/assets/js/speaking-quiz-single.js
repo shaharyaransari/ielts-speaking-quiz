@@ -244,18 +244,20 @@ function doRecording(){
                             results_obj.result_elements[currentSpIndex]['questions'][currentQuestionIndex].corrections = corrections;
                             results_obj.result_elements[currentSpIndex]['questions'][currentQuestionIndex].gpt_input  = formatCorrectionsForChatGPT(corrections);
                             let formattedTranscript = transcript;
+                            let offsetincrease = 0;
                             console.log(corrections);
                             if(corrections.length > 0){
                                 for(let i=0; i < corrections.length ; i++){
-									let offset = corrections[i].offset;
+									let offset = corrections[i].offset + offsetincrease;
 									let length = corrections[i].length;
 // 									console.log(offset,length);
-                                    let placehoder = `PLACEHOLDER_${i}`;
+                                    let placeholder = `PLACEHOLDER_${i}`;
                                     let incorrectText = transcript.substr(offset,length);
-// 									console.log(offset,length,incorrectText);
-                                    let regex = new RegExp(`\\b${incorrectText}\\b`, 'i');
-                                    formattedTranscript = formattedTranscript.replace(regex, placehoder);
-                                    console.log(formattedTranscript);
+                                    // Calculate the difference in length between the placeholder and the original text
+                                    let placehoderLength = placeholder.length;
+                                    let textLength = length;
+                                    offsetincrease += (placehoderLength - textLength); 
+                                    formattedTranscript = formattedTranscript.slice(0, offset) + placeholder + formattedTranscript.slice(offset + length)
                                 }
                             }
 							if(corrections.length > 0){
