@@ -113,8 +113,10 @@ async function getPronunciationData(sp, spIndex) {
 
             // console.log(response);
             let pronunciationData = Array.isArray(response.data) && response.data.length > 0 ? response.data[0] : [];  // response.data[0] is an array of objects
+            if(response.data.message !=''){
+                display_isq_msg(response.data.message);
+            }
             results_obj.result_elements[spIndex]['questions'][qIndex].pronunciation_data = pronunciationData;
-            // console.log(pronunciationData);
             return pronunciationData;
         } catch (error) {
             console.error('Error fetching pronunciation data:', error);
