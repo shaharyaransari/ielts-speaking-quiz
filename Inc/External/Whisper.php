@@ -39,7 +39,8 @@ class Whisper
             CURLOPT_POSTFIELDS => array(
                 'file' => $cfile,
                 'model' => 'whisper-1',
-                'language' => 'en'
+                'language' => 'en',
+                'prompt' => 'I\'m, uh, is a, you know, Vietnamese ESL student. So, like, I may make some mistake in my grammar.'
             ),
             CURLOPT_HTTPHEADER => array(
                 'Authorization: Bearer ' . self::$token,
