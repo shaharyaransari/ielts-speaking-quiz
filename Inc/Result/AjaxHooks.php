@@ -94,12 +94,8 @@ class AjaxHooks{
          $result = json_decode(stripslashes($_POST['result']),true);
          $try = $result['try_number'];
          $quiz = $result['quiz_id'];
-         // $author_id = get_post_field( 'post_author', $quiz );
-         // $meta_key = "ielts_quiz_{$quiz}_{$try}";
          $result['result_ready'] = true;
-         // $author_id = 1;
          $result_id = ResultsManager::add_result($user_id, $quiz, $result, $try);
-         // $updated = update_user_meta($user_id,$meta_key, $result );
          if($result_id){
             wp_send_json_success($result);
          }else{

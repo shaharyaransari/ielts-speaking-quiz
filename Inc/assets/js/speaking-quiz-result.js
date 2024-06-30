@@ -4,9 +4,7 @@ let results_obj = wpdata.result; // Get Result Data
 let currentSpeakingPart = null;
 let currentSpIndex = null;
 let isResultReady = results_obj.result_ready; 
-// let isResultReady = false; 
 let isPronunDataReady = results_obj.pronun_data_ready;
-// let isPronunDataReady = false;
 let currentActiveTab = null;
 // Initialize Page
 initResultPage();
@@ -112,7 +110,8 @@ async function getPronunciationData(sp, spIndex) {
             }).then(res => res.json());
 
             // console.log(response);
-            let pronunciationData = Array.isArray(response.data) && response.data.length > 0 ? response.data[0] : [];  // response.data[0] is an array of objects
+            let pronunciationData = Array.isArray(response.data[0]) && response.data[0].length > 0 ? response.data[0] : [];  // response.data[0] is an array of objects
+            console.log(pronunciationData);
             if(response.data.message !=''){
                 display_isq_msg(response.data.message);
             }

@@ -54,9 +54,13 @@ class PronunciationAPI{
 
     public static function validateJson($response){
         $res_array = explode('data: ',$response);
+        array_pop($res_array);
+        if($res_array[0] == ''){
+            array_shift($res_array);
+        }
         $res_json = implode(',', $res_array);
-        $res_json = substr($res_json, 1);
         $res_json = "[$res_json]";
+        $res_json = stripslashes($res_json);
         return $res_json;
     }
 }
